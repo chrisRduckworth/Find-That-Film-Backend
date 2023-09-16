@@ -1,4 +1,4 @@
-const { fetchGenres } = require("../models/genres-models");
+const { fetchGenres } = require("./models");
 
 exports.getGenres = (req, res, next) => {
   fetchGenres()

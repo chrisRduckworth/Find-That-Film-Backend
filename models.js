@@ -1,4 +1,4 @@
-const tmdbApi = require("../tmdbApi");
+const tmdbApi = require("./tmdbApi");
 
 exports.fetchGenres = () => {
   return tmdbApi({
