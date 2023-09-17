@@ -32,32 +32,33 @@ describe("GET /api/genres", () => {
   });
 });
 
-describe("GET /api/actors?query=actor", () => {
-  it("should respond with a list of the first 10 actors that match the search query", () => {
+describe("GET /api/people?name=name", () => {
+  it("should respond with a list of the first 10 people that match the search query", () => {
     return request(app)
-      .get("/api/actors?name=clooney")
+      .get("/api/people?name=clooney")
       .expect(200)
-      .then(({ body: { actors } }) => {
-        expect(actors).toHaveLength(10);
-        actors.forEach((actor) => {
-          expect(actor).toHaveProperty("name");
-          expect(actor).toHaveProperty("img");
-          expect(actor.knownFor).toHaveProperty("title");
-          expect(actor.knownFor).toHaveProperty("year");
+      .then(({ body: { people } }) => {
+        expect(people).toHaveLength(10);
+        people.forEach((person) => {
+          expect(person).toHaveProperty("id", expect.any(Number))
+          expect(person).toHaveProperty("name");
+          expect(person).toHaveProperty("img");
+          expect(person.knownFor).toHaveProperty("title");
+          expect(person.knownFor).toHaveProperty("year");
         });
       });
   });
   it("should respond subsequent pages if passed page query", () => {
     return request(app)
-      .get("/api/actors?name=john%20smith&page=6")
+      .get("/api/people?name=john%20smith&page=6")
       .expect(200)
-      .then(({ body: { actors } }) => {
-        expect(actors).toHaveLength(19);
+      .then(({ body: { people } }) => {
+        expect(people).toHaveLength(19);
       });
   });
   it("should respond with 400 invalid page if sent invalid type for page", () => {
     return request(app)
-      .get("/api/actors?name=clooney&page=bananas")
+      .get("/api/people?name=clooney&page=bananas")
       .expect(400)
       .then(({ body: { msg } }) => {
         expect(msg).toBe("Invalid Page");

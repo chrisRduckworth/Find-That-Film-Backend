@@ -10,7 +10,7 @@ exports.fetchGenres = () => {
   });
 };
 
-exports.fetchActors = (name, page = "1") => {
+exports.fetchPeople = (name, page = "1") => {
   page = parseInt(page);
   if (!page) {
     return Promise.reject({
@@ -23,21 +23,22 @@ exports.fetchActors = (name, page = "1") => {
     method: "GET",
     url: `/search/person?query=${name}&page=${page}`,
   }).then(({ data: { results } }) => {
-    const actors = results.map((actor) => {
+    const people = results.map((person) => {
       const knownFor = {};
       try {
-        knownFor.title = actor.known_for[0].title || actor.known_for[0].name;
-        knownFor.year = dayjs(actor.known_for[0].release_date).format("YYYY");
+        knownFor.title = person.known_for[0].title || person.known_for[0].name;
+        knownFor.year = dayjs(person.known_for[0].release_date).format("YYYY");
       } catch {
         knownFor.title = "";
         knownFor.year = "";
       }
       return {
-        name: actor.name,
-        img: `https://www.themoviedb.org/t/p/original${actor.profile_path}`,
+        id: person.id,
+        name: person.name,
+        img: `https://www.themoviedb.org/t/p/original${person.profile_path}`,
         knownFor,
       };
     });
-    return actors;
+    return people;
   });
 };
