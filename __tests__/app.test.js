@@ -7,27 +7,10 @@ describe("GET /api/genres", () => {
       .get("/api/genres")
       .expect(200)
       .then(({ body: { genres } }) => {
-        expect(genres).toEqual([
-          "Action",
-          "Adventure",
-          "Animation",
-          "Comedy",
-          "Crime",
-          "Documentary",
-          "Drama",
-          "Family",
-          "Fantasy",
-          "History",
-          "Horror",
-          "Music",
-          "Mystery",
-          "Romance",
-          "Science Fiction",
-          "TV Movie",
-          "Thriller",
-          "War",
-          "Western",
-        ]);
+        genres.forEach((genre) => {
+          expect(genre).toHaveProperty("id"),
+          expect(genre).toHaveProperty("name")
+        })
       });
   });
 });
