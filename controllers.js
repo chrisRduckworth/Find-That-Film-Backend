@@ -1,4 +1,4 @@
-const { fetchGenres, fetchPeople } = require("./models");
+const { fetchGenres, fetchPeople, fetchFilms } = require("./models");
 
 exports.getGenres = (req, res, next) => {
   fetchGenres()
@@ -13,6 +13,15 @@ exports.getPeople = (req, res, next) => {
   fetchPeople(name, page)
     .then((people) => {
       res.status(200).send({ people });
+    })
+    .catch(next);
+};
+
+exports.getFilms = (req, res, next) => {
+  const { actors, directors, genres, year } = req.query;
+  fetchFilms(actors, directors, genres, year)
+    .then((films) => {
+      res.status(200).send({ films });
     })
     .catch(next);
 };

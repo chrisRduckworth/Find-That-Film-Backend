@@ -1,4 +1,4 @@
-const { getGenres, getPeople } = require("./controllers");
+const { getGenres, getPeople, getFilms } = require("./controllers");
 const express = require("express");
 const cors = require("cors");
 
@@ -10,15 +10,17 @@ app.get("/api/genres", getGenres);
 
 app.get("/api/people", getPeople);
 
+app.get("/api/films", getFilms)
+
 app.use((err, req, res, next) => {
   if (err.status) {
     res.status(err.status).send({ msg: err.msg });
+  } else {
+    next(err)
   }
-  next(err);
 });
 
 app.use((err, req, res, next) => {
-  console.log(err)
   res.status(500).send({ msg: "Internal Server Error" });
 });
 

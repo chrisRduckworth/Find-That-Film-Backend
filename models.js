@@ -42,3 +42,69 @@ exports.fetchPeople = (name, page = "1") => {
     return people;
   });
 };
+
+exports.fetchFilms = (actors, directors, genres, year) => {
+  let queryStr = "";
+  if (actors) {
+    const actorIds = actors.split(",");
+    for (id of actorIds) {
+      if (!parseInt(id)) {
+        return Promise.reject({
+          status: 400,
+          msg: "Invalid Id",
+        });
+      }
+    }
+    queryStr += `&with_cast=${actors}`;
+  }
+
+  if (directors) {
+    const directorIds = directors.split(",");
+    for (id of directorIds) {
+      if (!parseInt(id)) {
+        return Promise.reject({
+          status: 400,
+          msg: "Invalid Id",
+        });
+      }
+    }
+    queryStr += `&with_crew=${directors}`;
+  }
+
+  if (genres) {
+    const genreIds = genres.split(",");
+    for (id of genreIds) {
+      if (!parseInt(id)) {
+        return Promise.reject({
+          status: 400,
+          msg: "Invalid Id",
+        });
+      }
+    }
+    queryStr += `&with_genres=${genres}`;
+  }
+
+  if (year) {
+    if (!parseInt(year)) {
+      return Promise.reject({
+        status: 400,
+        msg: "Invalid Year",
+      });
+    }
+    queryStr += `&primary_release_year=${year}`;
+  }
+
+  return tmdbApi({
+    method: "GET",
+    url: `/discover/movie?${queryStr}`,
+  }).then(({ data: { results } }) => {
+    return results.map((film) => {
+      return {
+        id: film.id,
+        title: film.original_title,
+        poster: `https://www.themoviedb.org/t/p/original${film.poster_path}`,
+        year: dayjs(film.release_date).format("YYYY"),
+      };
+    });
+  });
+};
