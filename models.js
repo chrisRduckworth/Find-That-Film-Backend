@@ -35,7 +35,10 @@ exports.fetchPeople = (name, page = "1") => {
       return {
         id: person.id,
         name: person.name,
-        img: `https://www.themoviedb.org/t/p/original${person.profile_path}`,
+        img:
+          person.profile_path === null
+            ? "https://www.themoviedb.org/assets/2/v4/glyphicons/basic/glyphicons-basic-4-user-grey-d8fe957375e70239d6abdd549fd7568c89281b2179b5f4470e2e12895792dfa5.svg"
+            : `https://www.themoviedb.org/t/p/original${person.profile_path}`,
         knownFor,
       };
     });
@@ -102,7 +105,10 @@ exports.fetchFilms = (actors, directors, genres, year) => {
       return {
         id: film.id,
         title: film.original_title,
-        poster: `https://www.themoviedb.org/t/p/original${film.poster_path}`,
+        poster:
+          film.poster_path === null
+            ? "https://www.themoviedb.org/assets/2/v4/glyphicons/basic/glyphicons-basic-38-picture-grey-c2ebdbb057f2a7614185931650f8cee23fa137b93812ccb132b9df511df1cfac.svg"
+            : `https://www.themoviedb.org/t/p/original${film.poster_path}`,
         year: dayjs(film.release_date).format("YYYY"),
       };
     });
